@@ -92,7 +92,7 @@ Prepared by: [0xnightswatch](https://x.com/0xnightswatch)
 
 # Protocol Summary
 
-DYAD is the first truly capital efficient decentralized stablecoin. Traditionally, two costs make stablecoins inefficient: DYAD is the first truly capital efficient decentralized stablecoin. Traditionally, two costs make stablecoins inefficient: DYAD is the first truly capital efficient decentralized stablecoin. Traditionally, two costs make stablecoins inefficient:
+DYAD is the first truly capital efficient decentralized stablecoin. Traditionally, two costs make stablecoins inefficient:
 surplus collateral and DEX liquidity. DYAD minimizes both of these costs through Kerosene, a token that lowers the individual
 cost to mint DYAD.
 
@@ -289,8 +289,7 @@ contract POC is Test {
 liquidated.This omission allows a user to liquidate their own position when the collateralization ratio falls below
 150%, which may bypassintended liquidation restrictions.
 
-https://github.com/code-423n4/2024-04-dyad/blob/344a58bb84b24d6c281be038a5dff1631426e9c0/
-src/core/VaultManagerV2.sol#L200-L203
+`src/core/VaultManagerV2.sol#L200-L203`
 
 **Impact**
 
@@ -359,10 +358,8 @@ The PoC demonstrates this: a single deposit of `160 USDC` is counted as` 320 USD
 
 Root Cause: Regular vaults need to be added to `KerosineManager` for _kerosine price calcculation_, but this allow user to add any regular vault twice.
 
-https://github.com/code-423n4/2024-04-dyad/blob/344a58bb84b24d6c281be038a5dff1631426e9c0/
-script/deploy/Deploy.V2.s.sol#L64-L65
-https://github.com/code-423n4/2024-04-dyad/blob/344a58bb84b24d6c281be038a5dff1631426e9c0/
-script/deploy/Deploy.V2.s.sol#L93-L96
+`script/deploy/Deploy.V2.s.sol#L64-L65`
+`script/deploy/Deploy.V2.s.sol#L93-L96`
 
 **Impact**
 
@@ -418,8 +415,7 @@ The root cause is that the protocol requires` id2Asset[id] > 0` for a vault to b
   }
 ```
 
-https://github.com/code-423n4/2024-04-dyad/blob/344a58bb84b24d6c281be038a5dff1631426e9c0/
-src/core/VaultManagerV2.sol#L113
+`src/core/VaultManagerV2.sol#L113`
 
 **Impact**
 
@@ -467,8 +463,7 @@ This provides flexibility and mitigates the issue of permanently locked bounded 
 
 When vault is called to get price from oracle, `Vault` must perform a sanity check and revert if `asnwer < 0`
 
-https://github.com/code-423n4/2024-04-dyad/blob/344a58bb84b24d6c281be038a5dff1631426e9c0/
-src/core/Vault.sol#L91-L103
+`src/core/Vault.sol#L91-L103`
 
 **Impact**
 
@@ -503,8 +498,7 @@ Using the provided test test_ifPriceOracleReturnZeroOvercollateralizedUserMayBeL
 **Description**
 KerosineVault contracts do not implement the `.oracle()` function. Any attempt to call `vault.oracle()` on these vaults reverts with “unrecognized function selector”. The `assetPrice()` function in UnboundedKerosineVault iterates over all associated vaults, calling `.oracle()` on each. Since non-regular (Kerosine) vaults do not implement `.oracle()`, this call fails, causing the function to revert and breaking price retrieval for KEROSINE positions.
 
-https://github.com/code-423n4/2024-04-dyad/blob/344a58bb84b24d6c281be038a5dff1631426e9c0/
-src/core/Vault.kerosine.unbounded.sol#L50-L68
+`src/core/Vault.kerosine.unbounded.sol#L50-L68`
 
 **Impact**
 
@@ -630,8 +624,7 @@ Like:
 
 The functions `VaultManagerV2::getVaults(uint id)` and `VaultManagerV2::hasVault(uint id, address vault)` currently operate only on regular (non-Kerosine) vaults. There is no handling for KerosineVaults, which may cause confusion for users or integrators who expect these functions to reflect all vault types.
 
-https://github.com/code-423n4/2024-04-dyad/blob/0b3d80b38e8e98f8d482347eb7c0891b06b58b08/
-src/core/VaultManagerV2.sol#L290-L307
+`src/core/VaultManagerV2.sol#L290-L307`
 
 **Impact**
 
