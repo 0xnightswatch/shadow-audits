@@ -9,4 +9,8 @@ The repo may include:
 - Markdown audit reports (`.md`)
 - PDF versions of reports (`.pdf`)
 
+```
+pandoc AuditReport.md -o AuditReport.pdf --template=eisvogel --listings --pdf-engine=xelatex
+```
+
 Author: 0xnightswatch
